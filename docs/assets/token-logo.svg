@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 360" role="img" aria-labelledby="title desc">
+  <title id="title">TOKEN logo</title>
+  <desc id="desc">Context blocks converge through a safety gate into one forward flow beside the TOKEN wordmark.</desc>
+  <defs>
+    <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- input context blocks -->
+  <rect x="32" y="105" width="32" height="32" rx="7" fill="#22D3EE"/>
+  <rect x="76" y="78" width="44" height="44" rx="9" fill="#7A8793"/>
+  <rect x="83" y="145" width="54" height="54" rx="10" fill="#22D3EE"/>
+  <rect x="39" y="202" width="27" height="27" rx="6" fill="#7A8793"/>
+  <rect x="91" y="220" width="39" height="39" rx="8" fill="#22D3EE"/>
+
+  <!-- deterministic flow -->
+  <path d="M64 121 C126 121 134 174 218 180" fill="none" stroke="url(#flow)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M137 172 C171 172 186 180 228 180" fill="none" stroke="url(#flow)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M66 216 C132 216 141 188 218 180" fill="none" stroke="url(#flow)" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- safety gate -->
+  <path d="M176 74 L238 40 L306 78 L306 145 L269 145 L269 101 L238 83 L213 97 L213 145 L176 145 Z" fill="#1F2937"/>
+  <path d="M176 215 L213 215 L213 259 L238 276 L269 258 L269 215 L306 215 L306 282 L238 320 L176 286 Z" fill="#1F2937"/>
+
+  <!-- optimized output arrow -->
+  <rect x="218" y="169" width="118" height="22" rx="11" fill="url(#flow)"/>
+  <path d="M336 151 L387 180 L336 209 Z" fill="#0EA5E9"/>
+
+  <!-- geometric TOKEN wordmark -->
+  <g fill="#1F2937">
+    <rect x="455" y="92" width="158" height="32" rx="5"/>
+    <rect x="518" y="118" width="32" height="150" rx="5"/>
+
+    <path fill-rule="evenodd" d="M683 92 H783 Q824 92 824 133 V227 Q824 268 783 268 H683 Q642 268 642 227 V133 Q642 92 683 92 Z
+      M695 132 H771 Q784 132 784 145 V215 Q784 228 771 228 H695 Q682 228 682 215 V145 Q682 132 695 132 Z"/>
+
+    <rect x="872" y="92" width="32" height="176" rx="5"/>
+    <path d="M904 180 L978 92 H1023 L949 180 L1028 268 H981 Z"/>
+    <rect x="1060" y="92" width="150" height="32" rx="5"/>
+    <rect x="1060" y="236" width="150" height="32" rx="5"/>
+
+    <rect x="1248" y="92" width="32" height="176" rx="5"/>
+    <rect x="1390" y="92" width="32" height="176" rx="5"/>
+    <path d="M1278 92 H1316 L1392 211 V268 H1360 L1278 143 Z"/>
+  </g>
+  <rect x="1060" y="164" width="126" height="32" rx="5" fill="#22D3EE"/>
+</svg>

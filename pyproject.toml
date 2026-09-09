@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "token-runtime"
+version = "0.1.0a1"
+description = "Quality-preserving local context optimization runtime for LLM clients"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+token = "token_runtime.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

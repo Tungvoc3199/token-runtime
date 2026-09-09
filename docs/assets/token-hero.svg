@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" role="img" aria-labelledby="title desc">
+  <title id="title">TOKEN adaptive context optimization</title>
+  <desc id="desc">TOKEN optimizes eligible context and passes risky context through unchanged.</desc>
+  <defs>
+    <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101923"/>
+      <stop offset="1" stop-color="#0B1118"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="520" rx="28" fill="url(#panel)"/>
+  <text x="72" y="92" fill="#F8FAFC" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="46" font-weight="750">Reduce context when safe.</text>
+  <text x="72" y="142" fill="#9CA3AF" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="28" font-weight="500">Pass through when it isn't.</text>
+
+  <!-- incoming context -->
+  <g transform="translate(80 210)">
+    <rect x="0" y="15" width="42" height="42" rx="9" fill="#22D3EE"/>
+    <rect x="58" y="-5" width="55" height="55" rx="11" fill="#7A8793"/>
+    <rect x="62" y="70" width="67" height="67" rx="13" fill="#22D3EE"/>
+    <rect x="5" y="102" width="33" height="33" rx="7" fill="#7A8793"/>
+    <rect x="91" y="150" width="48" height="48" rx="10" fill="#22D3EE"/>
+    <text x="0" y="245" fill="#94A3B8" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20">request context</text>
+  </g>
+
+  <!-- merge into gate -->
+  <path d="M205 244 C300 244 315 314 430 320" fill="none" stroke="url(#flow)" stroke-width="14" stroke-linecap="round"/>
+  <path d="M210 312 C310 312 335 320 442 320" fill="none" stroke="url(#flow)" stroke-width="14" stroke-linecap="round"/>
+  <path d="M210 382 C305 382 325 335 430 320" fill="none" stroke="url(#flow)" stroke-width="14" stroke-linecap="round"/>
+
+  <g transform="translate(420 184)">
+    <path d="M0 0 L92 -52 L190 3 L190 107 L145 107 L145 31 L92 0 L45 27 L45 107 L0 107 Z" fill="#1F2937" stroke="#334155" stroke-width="2"/>
+    <path d="M0 165 L45 165 L45 245 L92 272 L145 241 L145 165 L190 165 L190 269 L92 324 L0 272 Z" fill="#1F2937" stroke="#334155" stroke-width="2"/>
+    <text x="95" y="143" text-anchor="middle" fill="#F8FAFC" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="22" font-weight="700">SAFE GATE</text>
+  </g>
+
+  <!-- output lanes -->
+  <path d="M610 320 H760" fill="none" stroke="url(#flow)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M760 320 C840 320 845 246 925 246" fill="none" stroke="#22D3EE" stroke-width="12" stroke-linecap="round"/>
+  <path d="M760 320 C840 320 845 391 925 391" fill="none" stroke="#475569" stroke-width="10" stroke-linecap="round"/>
+
+  <g transform="translate(920 188)">
+    <rect width="400" height="118" rx="20" fill="#0F2430" stroke="#22D3EE" stroke-width="2"/>
+    <text x="28" y="42" fill="#67E8F9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" font-weight="700">ELIGIBLE → OPTIMIZE</text>
+    <text x="28" y="83" fill="#F8FAFC" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="30" font-weight="750">6,975 → 3,927 tokens</text>
+    <text x="324" y="42" fill="#22D3EE" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">−43.70%</text>
+  </g>
+
+  <g transform="translate(920 338)">
+    <rect width="400" height="106" rx="20" fill="#111827" stroke="#475569" stroke-width="2"/>
+    <text x="28" y="41" fill="#CBD5E1" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" font-weight="700">RISKY / UNSUPPORTED → BYPASS</text>
+    <text x="28" y="75" fill="#94A3B8" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20">original request • same provider/model</text>
+  </g>
+
+  <text x="72" y="488" fill="#64748B" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18">Local-first · deterministic V1 · reversible recovery · no prompt logging</text>
+</svg>
