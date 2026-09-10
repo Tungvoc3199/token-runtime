@@ -170,15 +170,15 @@ Telemetry uses an allowlist. Prompt bodies, authorization headers, API keys, and
 token benchmark --file cases.json
 ```
 
-## Public release
+## Stable baseline
 
-Current public alpha:
+The first verified alpha baseline is locked separately from ongoing development:
 
-- Release: [`v0.1.0-alpha.1`](https://github.com/Tungvoc3199/token-runtime/releases/tag/v0.1.0-alpha.1)
-- Package version: `0.1.0a1`
-- License: Apache-2.0
+- Canonical stable tag: `TOKEN-V1-ALPHA-STABLE-20260909`
+- Canonical stable branch: `stable/token-v1-alpha-20260909`
+- Baseline commit: `e45a09859ec3df8c7bb15589bdc096e680884175`
 
-The public repository uses a sanitized release history. Internal development and rollback metadata are intentionally not published.
+Canonical development continues in the private source; stable refs are not advanced with normal feature work.
 
 ## Alpha boundaries
 
@@ -195,9 +195,12 @@ The approved 24-call live campaign found a real regression class. The final poli
 
 ## Documentation
 
-- [Alpha verification status](docs/ALPHA-STATUS.md)
-- [V1 product specification](docs/specs/TOKEN-V1.md)
 - [Security and privacy contract](SECURITY.md)
+- [Claims registry](docs/CLAIMS.md)
+- [Threat model](docs/THREAT-MODEL.md)
+- [Release process](docs/RELEASE-PROCESS.md)
+- [GitHub governance](docs/GITHUB-GOVERNANCE.md)
+- [Public benchmark](benchmarks/README.md)
 - [v0.1.0-alpha.1 release notes](docs/releases/v0.1.0-alpha.1.md)
 - [Apache-2.0 license](LICENSE)
 

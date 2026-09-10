@@ -5,6 +5,8 @@ import xml.etree.ElementTree as ET
 
 
 ROOT = Path(__file__).resolve().parents[1]
+CHECKOUT_SHA = "11d5960a326750d5838078e36cf38b85af677262"
+SETUP_PYTHON_SHA = "a26af69be951a213d495a4c3e4e4022e16d87065"
 
 
 class PublicReadyContractTests(unittest.TestCase):
@@ -20,10 +22,12 @@ class PublicReadyContractTests(unittest.TestCase):
 
     def test_ci_runs_real_python_checks(self):
         workflow = (ROOT / ".github/workflows/ci.yml").read_text()
-        self.assertIn("actions/checkout@v4", workflow)
-        self.assertIn("actions/setup-python@v5", workflow)
-        self.assertIn("python -m unittest -q", workflow)
-        self.assertIn("python -m compileall -q src tests", workflow)
+        self.assertIn(f"actions/checkout@{CHECKOUT_SHA}", workflow)
+        self.assertIn(f"actions/setup-python@{SETUP_PYTHON_SHA}", workflow)
+        self.assertIn("ruff check src tests scripts benchmarks", workflow)
+        self.assertIn("coverage report --fail-under=80", workflow)
+        self.assertIn("python -m compileall -q src tests scripts benchmarks", workflow)
+        self.assertIn("python scripts/public_audit.py --source-tree .", workflow)
 
     def test_release_metadata_and_license(self):
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
@@ -37,9 +41,14 @@ class PublicReadyContractTests(unittest.TestCase):
         readme = (ROOT / "README.md").read_text()
         self.assertIn("docs/assets/token-logo.svg", readme)
         self.assertIn("docs/assets/token-hero.svg", readme)
-        self.assertIn("actions/workflows/ci.yml/badge.svg", readme)
+        self.assertIn("actions/workflows/ci.yml/badge.svg?branch=main", readme)
         self.assertIn("Apache--2.0", readme)
         self.assertIn("v0.1.0-alpha.1", readme)
+        self.assertIn("docs/CLAIMS.md", readme)
+        self.assertIn("docs/RELEASE-PROCESS.md", readme)
+        self.assertNotIn("docs/ALPHA-STATUS.md", readme)
+        self.assertNotIn("docs/specs/TOKEN-V1.md", readme)
+        self.assertNotIn("docs/superpowers/", readme)
 
 
 if __name__ == "__main__":

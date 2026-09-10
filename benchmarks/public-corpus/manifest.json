@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "trajectories": [
+    {"file": "01-assistant-redundancy.json", "title": "assistant redundancy"},
+    {"file": "02-tool-output-redundancy.json", "title": "tool output redundancy"},
+    {"file": "03-active-user-protected.json", "title": "active user protected"},
+    {"file": "04-structured-decision-bypass.json", "title": "structured decision bypass"},
+    {"file": "05-exact-edit-bypass.json", "title": "exact edit bypass"},
+    {"file": "06-ambiguous-context-bypass.json", "title": "ambiguous context bypass"}
+  ]
+}

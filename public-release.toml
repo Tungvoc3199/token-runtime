@@ -1,0 +1,41 @@
+schema_version = 1
+
+[files]
+public = [
+  "PUBLIC_RELEASE_MANIFEST.json",
+  ".github/**",
+  ".gitignore",
+  ".pre-commit-config.yaml",
+  "AGENTS.md",
+  "CHANGELOG.md",
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "LICENSE",
+  "README.md",
+  "SECURITY.md",
+  "llms.txt",
+  "pyproject.toml",
+  "public-release.toml",
+  "src/token_runtime/**",
+  "tests/**",
+  "benchmarks/README.md",
+  "benchmarks/public-corpus/**",
+  "benchmarks/results/public-v1.json",
+  "benchmarks/run_rd0b_offline.py",
+  "scripts/public_audit.py",
+  "scripts/public_release.py",
+  "docs/CLAIMS.md",
+  "docs/GITHUB-GOVERNANCE.md",
+  "docs/RELEASE-PROCESS.md",
+  "docs/THREAT-MODEL.md",
+  "docs/engineering/LESSONS.md",
+  "docs/assets/**",
+  "docs/releases/v0.1.0-alpha.1.md",
+]
+private = [
+  "docs/specs/TOKEN-V1.md",
+  "docs/specs/TOKEN-PUBLIC-READY-1.md",
+  "docs/ALPHA-STATUS.md",
+  "docs/superpowers/**",
+  "benchmarks/results/rd0b-v1.json",
+]

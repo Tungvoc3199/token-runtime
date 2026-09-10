@@ -19,28 +19,36 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install TOKEN
+      - name: Install TOKEN dev tooling
         run: |
           python -m pip install --upgrade pip setuptools
-          python -m pip install . --no-build-isolation
+          python -m pip install -e '.[dev]' --no-build-isolation
 
-      - name: Unit tests
-        run: python -m unittest -q
+      - name: Ruff
+        run: ruff check src tests scripts benchmarks
+
+      - name: Unit tests with coverage
+        run: |
+          coverage run -m unittest -q
+          coverage report --fail-under=80
 
       - name: Compile check
-        run: python -m compileall -q src tests
+        run: python -m compileall -q src tests scripts benchmarks
 
       - name: Import and CLI smoke
         run: |
           python -c "import token_runtime"
           token --help >/dev/null
+
+      - name: Public-source audit
+        run: python scripts/public_audit.py --source-tree .
 
       - name: Whitespace gate
         run: git diff-tree --check --root HEAD

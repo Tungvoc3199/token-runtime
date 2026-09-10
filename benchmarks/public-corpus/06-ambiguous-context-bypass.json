@@ -1,0 +1,1 @@
+{"turns":[{"index":2,"blocks":[{"id":"opaque-a","kind":"retrieved","text":"DECISION: preserve opaque synthetic branch A"},{"id":"opaque-b","kind":"tool_output","role":"tool","text":"DECISION: preserve opaque synthetic branch B"},{"id":"active-user","kind":"user","role":"user","text":"Handle this ambiguous synthetic context conservatively."}]}]}

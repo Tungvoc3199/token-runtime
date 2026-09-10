@@ -1,0 +1,18 @@
+# TOKEN
+
+TOKEN is a local-first adaptive context runtime for AI agents.
+
+Primary public docs:
+- README.md
+- SECURITY.md
+- CONTRIBUTING.md
+- docs/THREAT-MODEL.md
+- docs/CLAIMS.md
+- docs/RELEASE-PROCESS.md
+
+Core invariants:
+- quality first
+- conservative exact passthrough when uncertain
+- no silent provider/model switching
+- reversible recovery where required
+- no secret or prompt telemetry

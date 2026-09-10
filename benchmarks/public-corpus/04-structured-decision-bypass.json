@@ -1,0 +1,1 @@
+{"turns":[{"index":1,"blocks":[{"id":"decision","kind":"retrieved","text":"DECISION: choose synthetic region A"},{"id":"evidence","kind":"tool_output","role":"tool","text":"{\"candidate\":\"A\",\"score\":0.9}"},{"id":"active-user","kind":"user","role":"user","text":"Choose using the current structured evidence."}]}]}

@@ -1,0 +1,17 @@
+{
+  "all_protected_fidelity": true,
+  "all_recoverable": true,
+  "baseline_estimated_tokens": 742,
+  "bypass_count": 3,
+  "corpus_cases": 6,
+  "eligible_saved_pct": 85.21,
+  "optimized_count": 3,
+  "optimized_estimated_tokens": 206,
+  "reason_counts": {
+    "competing_active_decisions": 1,
+    "exact_edit_context": 1,
+    "optimized": 3,
+    "structured_decision_context": 1
+  },
+  "total_saved_pct": 72.24
+}

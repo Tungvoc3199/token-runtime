@@ -8,11 +8,47 @@ version = "0.1.0a1"
 description = "Quality-preserving local context optimization runtime for LLM clients"
 readme = "README.md"
 license = { text = "Apache-2.0" }
+authors = [{ name = "Tungvoc3199" }]
+keywords = ["ai-agents", "context-engineering", "llm", "token-optimization"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
 requires-python = ">=3.12"
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Tungvoc3199/token-runtime"
+Repository = "https://github.com/Tungvoc3199/token-runtime"
+Issues = "https://github.com/Tungvoc3199/token-runtime/issues"
+Changelog = "https://github.com/Tungvoc3199/token-runtime/blob/main/CHANGELOG.md"
 
 [project.scripts]
 token = "token_runtime.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[project.optional-dependencies]
+dev = [
+  "coverage[toml]>=7,<8",
+  "pre-commit>=4,<5",
+  "ruff>=0.12,<1",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+# Existing pre-C1 style debt; keep C1 from rewriting runtime behavior.
+"src/token_runtime/adapters.py" = ["F401"]
+"src/token_runtime/cli.py" = ["F401"]
+"src/token_runtime/gateway.py" = ["F401"]
+"src/token_runtime/terminal_ui.py" = ["E731"]
+"tests/test_cli.py" = ["E702"]

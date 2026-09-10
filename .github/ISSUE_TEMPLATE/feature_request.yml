@@ -1,0 +1,24 @@
+name: Feature request
+description: Propose a bounded TOKEN capability
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: What problem should TOKEN solve?
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety and compatibility
+      description: Which passthrough, fidelity, recovery, or protocol invariants could be affected?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Tests, benchmarks, or references that support the proposal.

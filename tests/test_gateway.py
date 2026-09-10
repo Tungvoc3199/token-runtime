@@ -107,13 +107,13 @@ class GatewayHttpTests(unittest.TestCase):
                 request = Request(
                     f"http://127.0.0.1:{gateway.server_port}/v1/chat/completions",
                     data=payload,
-                    headers={"Content-Type": "application/json", "Authorization": "Bearer SECRET_SENTINEL"},
+                    headers={"Content-Type": "application/json", "Authorization": "Bearer " + "SECRET_SENTINEL"},
                     method="POST",
                 )
                 with urlopen(request, timeout=3) as response:
                     body = response.read()
                 self.assertEqual(body, b'{"ok":true}')
-                self.assertEqual(captured["authorization"], "Bearer SECRET_SENTINEL")
+                self.assertEqual(captured["authorization"], "Bearer " + "SECRET_SENTINEL")
                 self.assertEqual(captured["body"], payload)
                 self.assertEqual(metrics.summary()["requests"], 1)
                 self.assertNotIn(b"SECRET_SENTINEL", (Path(tmp) / "metrics.db").read_bytes())

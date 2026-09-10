@@ -29,6 +29,7 @@ from .metrics import MetricsStore
 from .model import ContextBlock, RequestEnvelope
 from .planner import ContextPlanner
 from .store import RecoveryStore
+from .terminal_ui import render_welcome
 
 
 def _add_config_argument(parser: argparse.ArgumentParser) -> None:
@@ -37,7 +38,7 @@ def _add_config_argument(parser: argparse.ArgumentParser) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="token")
-    subs = parser.add_subparsers(dest="command", required=True)
+    subs = parser.add_subparsers(dest="command")
     for name in ("serve", "status", "doctor"):
         sub = subs.add_parser(name)
         _add_config_argument(sub)
@@ -173,6 +174,9 @@ def main(argv=None, *, stdin=None, stdout=None) -> int:
     args = build_parser().parse_args(argv)
     stdin = sys.stdin if stdin is None else stdin
     stdout = sys.stdout if stdout is None else stdout
+    if args.command is None:
+        render_welcome(stdout)
+        return 0
     path = _config_path(args.config)
 
     if args.command == "install":
