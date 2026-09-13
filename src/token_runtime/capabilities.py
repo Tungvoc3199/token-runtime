@@ -16,6 +16,7 @@ class CapabilityKey:
     protocol_family: str
     provider_family: str
     model_family: str | None = None
+    client_version: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,13 +37,16 @@ class CapabilityProfile:
     evidence_id: str = "unknown"
 
     def to_primitive(self) -> dict[str, object]:
+        key: dict[str, object] = {
+            "client_family": self.key.client_family,
+            "protocol_family": self.key.protocol_family,
+            "provider_family": self.key.provider_family,
+            "model_family": self.key.model_family,
+        }
+        if self.key.client_version:
+            key["client_version"] = self.key.client_version
         return {
-            "key": {
-                "client_family": self.key.client_family,
-                "protocol_family": self.key.protocol_family,
-                "provider_family": self.key.provider_family,
-                "model_family": self.key.model_family,
-            },
+            "key": key,
             "context_window_semantics": self.context_window_semantics,
             "tokenizer_family": self.tokenizer_family,
             "prompt_cache": self.prompt_cache,

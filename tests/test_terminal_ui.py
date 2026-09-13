@@ -18,7 +18,7 @@ class TerminalUiTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertIn("TOKEN", text)
         self.assertIn("Adaptive Context Runtime", text)
-        self.assertIn("v0.1.0-alpha.1", text)
+        self.assertIn("v0.1.0-alpha.2", text)
         self.assertIn("Reduce context when safe", text)
         self.assertIn("token doctor", text)
         self.assertNotIn("\x1b[", text)

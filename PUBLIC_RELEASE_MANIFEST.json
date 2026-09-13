@@ -1,7 +1,8 @@
 {
-  "file_count": 85,
-  "public_payload_sha256": "87e9546d7bf241296292021b6978f967735666547b85b7b212531b80ce1878cf",
+  "file_count": 123,
+  "public_payload_sha256": "51826dac38b6148d228d52a22bc14d832d15cfe93d037a530d9f5af9345635a9",
   "release_version": "v0.1.0-alpha.2",
-  "runtime_tree_sha256": "8b44e6d9998f83aab0982d22870acde4a3520ef30c8fcf2d2ac1b51ab17f88b5",
+  "runtime_tree_sha256": "2185513b9723ea3efc8cc37ef14dfeb6b27c818bd7f05a0cedbdc215382d89aa",
+  "sanitizer_contract_version": 1,
   "schema_version": 1
 }

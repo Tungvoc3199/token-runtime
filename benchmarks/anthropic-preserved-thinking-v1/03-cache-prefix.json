@@ -1,0 +1,14 @@
+{
+  "model": "claude-fable-5-1",
+  "max_tokens": 192,
+  "system": [{"type": "text", "text": "Cached synthetic policy.", "cache_control": {"type": "ephemeral"}}],
+  "tools": [{"name": "lookup", "description": "Synthetic lookup", "input_schema": {"type": "object"}, "cache_control": {"type": "ephemeral"}}],
+  "messages": [
+    {"role": "user", "content": "Prime cache prefix C."},
+    {"role": "assistant", "content": [
+      {"type": "thinking", "thinking": "cache-private-reasoning", "signature": "signature-value"},
+      {"type": "text", "text": "Cache prefix ready."}
+    ]},
+    {"role": "user", "content": "Continue C."}
+  ]
+}

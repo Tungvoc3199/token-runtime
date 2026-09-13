@@ -1,0 +1,23 @@
+{
+  "bypass_count": 5,
+  "bypass_reasons": {
+    "unsupported_wire_shape": 5
+  },
+  "cache_metadata_preserved": true,
+  "changed_block_ids": [],
+  "classification": "PASSTHROUGH_ONLY",
+  "classification_reason": "offline_conformance_only",
+  "corpus_cases": 5,
+  "evidence_id": "token-anthropic-preserved-thinking-cert-1:offline-v1",
+  "generation_id": "token-anthropic-preserved-thinking-cert-1:pt-v1",
+  "hard_bypass_complete": true,
+  "inventory_complete": true,
+  "model_scope_exact": true,
+  "optimized_count": 0,
+  "protected_prefix_exact": true,
+  "resume_continuity": true,
+  "thinking_stripped_control_reducible": true,
+  "token_off_on_wire_equivalent": true,
+  "tool_history_fidelity": true,
+  "unknown_native_passthrough": true
+}

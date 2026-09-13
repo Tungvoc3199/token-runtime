@@ -8,6 +8,7 @@ Primary public docs:
 - CONTRIBUTING.md
 - docs/THREAT-MODEL.md
 - docs/CLAIMS.md
+- docs/COMPATIBILITY.md
 - docs/RELEASE-PROCESS.md
 
 Core invariants:
@@ -16,3 +17,8 @@ Core invariants:
 - no silent provider/model switching
 - reversible recovery where required
 - no secret or prompt telemetry
+
+Compatibility notes:
+- Codex CLI 0.154.0 is certified only at the documented Responses request/response boundary.
+- Anthropic Messages and Gemini GenerateContent adapters have offline conformance but remain PASSTHROUGH_ONLY and are not production gateway-wired.
+- Canonical repository capability does not by itself prove that an installed runtime has been upgraded.

@@ -86,5 +86,41 @@ class EvolutionRuntimeIsolationTests(unittest.TestCase):
             self.assertIn("no_eligible_reduction", bypassed.reasons)
 
 
+    def test_engine_semantics_are_model_identifier_agnostic(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            line = "future-model invariant payload repeated for deterministic reduction"
+            outcomes = []
+            for index, model_id in enumerate((
+                "gpt-future",
+                "claude-future",
+                "gemini-future",
+                "unknown-provider/model-v99",
+            )):
+                engine = OptimizationEngine(
+                    planner=ContextPlanner(),
+                    store=RecoveryStore(Path(tmp) / f"recovery-{index}.db"),
+                    reducers=[RepeatedLineReducer()],
+                )
+                envelope = RequestEnvelope(
+                    blocks=(
+                        ContextBlock("r", "retrieved", "\n".join([line] * 20)),
+                        ContextBlock("u", "user", "summarize", turn_index=2),
+                    ),
+                    opaque={"model": model_id},
+                )
+                result = engine.optimize(envelope)
+                outcomes.append((
+                    result.decision,
+                    result.reasons,
+                    result.before_estimated_tokens,
+                    result.after_estimated_tokens,
+                    result.changed_block_ids,
+                    tuple((block.id, block.kind, block.text) for block in result.envelope.blocks),
+                ))
+
+            self.assertTrue(all(outcome == outcomes[0] for outcome in outcomes[1:]))
+            self.assertEqual(outcomes[0][0], OptimizationDecision.OPTIMIZE)
+
+
 if __name__ == "__main__":
     unittest.main()

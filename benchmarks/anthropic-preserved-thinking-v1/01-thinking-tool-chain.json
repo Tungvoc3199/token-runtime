@@ -1,0 +1,15 @@
+{
+  "model": "claude-fable-5-1",
+  "max_tokens": 256,
+  "system": [{"type": "text", "text": "Follow the synthetic test policy."}],
+  "tools": [{"name": "lookup", "description": "Synthetic lookup", "input_schema": {"type": "object"}}],
+  "messages": [
+    {"role": "user", "content": "Find synthetic item A."},
+    {"role": "assistant", "content": [
+      {"type": "thinking", "thinking": "synthetic-private-reasoning", "signature": "signature-value"},
+      {"type": "tool_use", "id": "toolu_a", "name": "lookup", "input": {"q": "A"}}
+    ]},
+    {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "toolu_a", "content": "item=A,status=green"}]},
+    {"role": "user", "content": "Continue using that tool result."}
+  ]
+}

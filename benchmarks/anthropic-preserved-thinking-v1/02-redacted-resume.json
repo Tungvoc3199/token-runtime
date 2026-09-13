@@ -1,0 +1,13 @@
+{
+  "model": "claude-fable-5-1",
+  "max_tokens": 192,
+  "system": "Synthetic resume policy.",
+  "messages": [
+    {"role": "user", "content": "Start synthetic sequence B."},
+    {"role": "assistant", "content": [
+      {"type": "redacted_thinking", "data": "ciphertext-value"},
+      {"type": "text", "text": "Checkpoint B ready."}
+    ]},
+    {"role": "user", "content": "Resume exactly from checkpoint B."}
+  ]
+}

@@ -12,9 +12,9 @@ Local-first adaptive context optimization for Codex and OpenAI-compatible AI age
 ![License](https://img.shields.io/badge/license-Apache--2.0-22D3EE)
 ![Local First](https://img.shields.io/badge/privacy-local--first-238636)
 ![Codex](https://img.shields.io/badge/Codex-integration_verified-8957e5)
-[![Release](https://img.shields.io/badge/release-v0.1.0--alpha.1-0EA5E9)](https://github.com/Tungvoc3199/token-runtime/releases/tag/v0.1.0-alpha.1)
+[![Release](https://img.shields.io/badge/release-v0.1.0--alpha.2-0EA5E9)](https://github.com/Tungvoc3199/token-runtime/releases/tag/v0.1.0-alpha.2)
 
-[Quickstart](#quickstart) · [Proof](#proof) · [How it works](#how-it-works) · [Safety](#safety-first-by-design) · [Compatibility](#compatibility) · [Security](SECURITY.md)
+[Quickstart](#quickstart) · [Proof](#proof) · [How it works](#how-it-works) · [Safety](#safety-first-by-design) · [Compatibility](#compatibility) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Security](SECURITY.md)
 
 </div>
 
@@ -144,11 +144,14 @@ For Codex, TOKEN transactionally manages only the selected OpenAI-compatible pro
 | OpenAI Responses API, text payloads | ✅ Supported |
 | OpenAI Chat Completions, text payloads | ✅ Supported |
 | Codex with OpenAI-compatible provider config | ✅ Transactional integration verified |
+| Codex CLI 0.154.0 Responses boundary | ✅ `CERTIFIED` at the observed request/response boundary |
 | Generic apps honoring `OPENAI_BASE_URL` | ✅ Supported |
 | Local OpenAI-compatible gateways/routers | ✅ Supported |
-| Anthropic native wire protocol | ⏳ Not implemented |
-| Gemini native wire protocol | ⏳ Not implemented |
-| Multimodal optimization | ⏳ Disabled; passthrough only |
+| Anthropic Messages adapter/conformance | 🛡️ `PASSTHROUGH_ONLY`; offline conformance, not production gateway-wired |
+| Gemini GenerateContent adapter/conformance | 🛡️ `PASSTHROUGH_ONLY`; offline conformance, not production gateway-wired |
+| Multimodal optimization | 🛡️ `PASSTHROUGH_ONLY` |
+
+`CERTIFIED` is always version- and boundary-specific. Canonical source can also contain adapters that are not deployed in the active gateway. See the [compatibility matrix](docs/COMPATIBILITY.md) for the exact evidence boundary.
 
 ## Operations
 
@@ -188,7 +191,7 @@ TOKEN currently **does not claim**:
 - a universal percentage reduction for all requests;
 - actual currency savings from provider billing;
 - broad provider-cache non-regression;
-- native Anthropic or Gemini support;
+- production native Anthropic or Gemini gateway routing;
 - multimodal context optimization.
 
 The approved 24-call live campaign found a real regression class. The final policy responds by bypassing that class unchanged rather than attempting more aggressive compression.
@@ -197,11 +200,12 @@ The approved 24-call live campaign found a real regression class. The final poli
 
 - [Security and privacy contract](SECURITY.md)
 - [Claims registry](docs/CLAIMS.md)
+- [Compatibility matrix](docs/COMPATIBILITY.md)
 - [Threat model](docs/THREAT-MODEL.md)
 - [Release process](docs/RELEASE-PROCESS.md)
 - [GitHub governance](docs/GITHUB-GOVERNANCE.md)
 - [Public benchmark](benchmarks/README.md)
-- [v0.1.0-alpha.1 release notes](docs/releases/v0.1.0-alpha.1.md)
+- [v0.1.0-alpha.2 release notes](docs/releases/v0.1.0-alpha.2.md)
 - [Apache-2.0 license](LICENSE)
 
 ---
