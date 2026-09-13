@@ -39,6 +39,9 @@ jobs:
           coverage run -m unittest -q
           coverage report --fail-under=80
 
+      - name: Distribution contract tests
+        run: python -m unittest -q tests.test_distribution
+
       - name: Compile check
         run: python -m compileall -q src tests scripts benchmarks
 

@@ -1,0 +1,15 @@
+{
+  "model": "claude-fable-5-1",
+  "max_tokens": 192,
+  "system": "Synthetic multi-turn policy.",
+  "messages": [
+    {"role": "user", "content": "Begin synthetic task D."},
+    {"role": "assistant", "content": [
+      {"type": "thinking", "thinking": "multi-private-reasoning", "signature": "signature-value"},
+      {"type": "text", "text": "synthetic repeated evidence line\nsynthetic repeated evidence line\nsynthetic repeated evidence line\nsynthetic repeated evidence line\nsynthetic repeated evidence line\nsynthetic repeated evidence line"}
+    ]},
+    {"role": "user", "content": "Acknowledge D1."},
+    {"role": "assistant", "content": "D1 acknowledged."},
+    {"role": "user", "content": "Continue to D2."}
+  ]
+}

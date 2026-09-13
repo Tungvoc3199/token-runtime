@@ -1,0 +1,63 @@
+name: Distribution qualification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_DATE_EPOCH: 1788998400
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Prepare isolated distribution tooling
+        run: |
+          python -m venv /tmp/token-dist-tools
+          /tmp/token-dist-tools/bin/python -m pip install 'build==1.6.0' 'setuptools==84.0.0' 'wheel==0.46.1' 'packaging==26.3' 'uv==0.12.13'
+          mkdir -p /tmp/token-dist-wheelhouse
+          /tmp/token-dist-tools/bin/python -m pip download --only-binary=:all: --no-deps -d /tmp/token-dist-wheelhouse 'setuptools==84.0.0' 'wheel==0.46.1' 'packaging==26.3'
+
+      - name: Build two sanitized candidates
+        env:
+          TOKEN_DISTRIBUTION_BUILD_WHEELHOUSE: /tmp/token-dist-wheelhouse
+        run: |
+          rm -rf /tmp/token-dist-candidate-a /tmp/token-dist-candidate-b /tmp/token-dist-release-a /tmp/token-dist-release-b
+          /tmp/token-dist-tools/bin/python scripts/distribution.py build --source . --candidate /tmp/token-dist-candidate-a --bundle /tmp/token-dist-release-a --release-label v0.1.0-alpha.2
+          /tmp/token-dist-tools/bin/python scripts/distribution.py build --source . --candidate /tmp/token-dist-candidate-b --bundle /tmp/token-dist-release-b --release-label v0.1.0-alpha.2
+
+      - name: Compare distribution bytes
+        run: |
+          cmp /tmp/token-dist-release-a/dist/token_runtime-0.1.0a2-py3-none-any.whl /tmp/token-dist-release-b/dist/token_runtime-0.1.0a2-py3-none-any.whl
+          cmp /tmp/token-dist-release-a/dist/token_runtime-0.1.0a2.tar.gz /tmp/token-dist-release-b/dist/token_runtime-0.1.0a2.tar.gz
+
+      - name: Verify and qualify install transitions
+        env:
+          TOKEN_DISTRIBUTION_BUILD_WHEELHOUSE: /tmp/token-dist-wheelhouse
+          PATH: /tmp/token-dist-tools/bin:/usr/bin:/bin
+        run: |
+          /tmp/token-dist-tools/bin/python scripts/distribution.py verify --bundle /tmp/token-dist-release-a
+          rm -rf /tmp/token-dist-prior /tmp/token-dist-install
+          /tmp/token-dist-tools/bin/python scripts/distribution.py prior-fixture --dist /tmp/token-dist-prior
+          /tmp/token-dist-tools/bin/python scripts/distribution.py qualify --bundle /tmp/token-dist-release-a --previous-wheel /tmp/token-dist-prior/token_runtime-0.1.0a1-py3-none-any.whl --work-root /tmp/token-dist-install
+          python scripts/public_audit.py --source-tree .
+
+      - name: Upload qualified bundle
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: token-runtime-v0.1.0-alpha.2-qualified
+          path: /tmp/token-dist-release-a/
+          if-no-files-found: error
+          retention-days: 14

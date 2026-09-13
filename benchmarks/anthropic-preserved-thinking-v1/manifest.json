@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "generation_id": "token-anthropic-preserved-thinking-cert-1:pt-v1",
+  "inventory": [
+    "cache_control",
+    "redacted_thinking",
+    "thinking",
+    "tool_result",
+    "tool_use"
+  ],
+  "trajectories": [
+    {"id": "thinking-tool-chain", "file": "01-thinking-tool-chain.json", "expected_decision": "BYPASS", "checks": ["protected_prefix", "off_on", "tool_history"]},
+    {"id": "redacted-resume", "file": "02-redacted-resume.json", "expected_decision": "BYPASS", "checks": ["protected_prefix", "off_on", "resume"]},
+    {"id": "cache-prefix", "file": "03-cache-prefix.json", "expected_decision": "BYPASS", "checks": ["protected_prefix", "off_on", "cache"]},
+    {"id": "multiturn-off-on", "file": "04-multiturn-off-on.json", "expected_decision": "BYPASS", "checks": ["protected_prefix", "off_on", "reducible_control"]},
+    {"id": "unknown-native-state", "file": "05-unknown-native-state.json", "expected_decision": "BYPASS", "checks": ["unknown_passthrough", "off_on"]}
+  ]
+}

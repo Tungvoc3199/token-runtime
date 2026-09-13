@@ -1,0 +1,12 @@
+{
+  "model": "claude-fable-5-1",
+  "max_tokens": 128,
+  "messages": [
+    {"role": "user", "content": "Synthetic future-state probe."},
+    {"role": "assistant", "content": [
+      {"type": "thinking", "thinking": "future-private-reasoning", "signature": "signature-value", "future_state": {"opaque": true}},
+      {"type": "text", "text": "Opaque future state present."}
+    ]},
+    {"role": "user", "content": "Continue safely."}
+  ]
+}

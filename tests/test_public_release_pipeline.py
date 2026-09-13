@@ -68,6 +68,8 @@ class PublicReleasePipelineTests(unittest.TestCase):
                 (destination / "PUBLIC_RELEASE_MANIFEST.json").read_text(encoding="utf-8")
             )
             self.assertEqual(manifest["schema_version"], 1)
+            self.assertIn("sanitizer_contract_version", manifest)
+            self.assertEqual(manifest["sanitizer_contract_version"], 1)
             self.assertEqual(manifest["release_version"], "v0.test")
             self.assertRegex(manifest["runtime_tree_sha256"], r"^[0-9a-f]{64}$")
             self.assertRegex(manifest["public_payload_sha256"], r"^[0-9a-f]{64}$")

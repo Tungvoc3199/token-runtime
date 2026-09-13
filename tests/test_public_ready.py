@@ -31,7 +31,7 @@ class PublicReadyContractTests(unittest.TestCase):
 
     def test_release_metadata_and_license(self):
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
-        self.assertEqual(project["version"], "0.1.0a1")
+        self.assertEqual(project["version"], "0.1.0a2")
         self.assertEqual(project["license"]["text"], "Apache-2.0")
         license_text = (ROOT / "LICENSE").read_text()
         self.assertIn("Apache License", license_text)
@@ -43,7 +43,7 @@ class PublicReadyContractTests(unittest.TestCase):
         self.assertIn("docs/assets/token-hero.svg", readme)
         self.assertIn("actions/workflows/ci.yml/badge.svg?branch=main", readme)
         self.assertIn("Apache--2.0", readme)
-        self.assertIn("v0.1.0-alpha.1", readme)
+        self.assertIn("v0.1.0-alpha.2", readme)
         self.assertIn("docs/CLAIMS.md", readme)
         self.assertIn("docs/RELEASE-PROCESS.md", readme)
         self.assertNotIn("docs/ALPHA-STATUS.md", readme)

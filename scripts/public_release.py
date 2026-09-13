@@ -107,6 +107,7 @@ def build_public_release(source: Path, destination: Path, version: str) -> dict[
 
     manifest: dict[str, object] = {
         "schema_version": 1,
+        "sanitizer_contract_version": 1,
         "release_version": version,
         "runtime_tree_sha256": runtime_digest,
         "public_payload_sha256": tree_digest(destination),

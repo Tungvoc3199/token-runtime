@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools==84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "token-runtime"
-version = "0.1.0a1"
+version = "0.1.0a2"
 description = "Quality-preserving local context optimization runtime for LLM clients"
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -33,6 +33,7 @@ where = ["src"]
 
 [project.optional-dependencies]
 dev = [
+  "build==1.6.0",
   "coverage[toml]>=7,<8",
   "pre-commit>=4,<5",
   "ruff>=0.12,<1",

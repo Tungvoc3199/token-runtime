@@ -23,6 +23,25 @@ class CapabilityTests(unittest.TestCase):
         self.assertEqual(primitive["key"]["client_family"], "codex")
         self.assertEqual(primitive["key"]["model_family"], "opaque-family")
         self.assertIs(primitive["exact_byte_preservation"], True)
+        self.assertNotIn("client_version", primitive["key"])
+
+    def test_versioned_key_serializes_exact_client_version(self):
+        key = CapabilityKey("codex", "responses", "openai", client_version="0.154.0")
+        profile = CapabilityProfile(key=key, evidence_id="fixture-v2")
+        self.assertEqual(profile.to_primitive()["key"]["client_version"], "0.154.0")
+
+    def test_snapshot_sorts_unversioned_and_versioned_same_boundary(self):
+        registry = CapabilityRegistry()
+        unversioned = CapabilityProfile(
+            key=CapabilityKey("codex", "responses", "openai"), evidence_id="legacy"
+        )
+        versioned = CapabilityProfile(
+            key=CapabilityKey("codex", "responses", "openai", client_version="0.154.0"),
+            evidence_id="versioned",
+        )
+        registry.register(versioned)
+        registry.register(unversioned)
+        self.assertEqual(registry.snapshot(), (unversioned, versioned))
 
     def test_registration_is_idempotent_for_equal_value_and_rejects_conflict(self):
         key = CapabilityKey("codex", "responses", "openai", "opaque-family")

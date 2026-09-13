@@ -26,12 +26,25 @@ class ProtocolAdapterContract(Protocol):
 
     def serialize(self, envelope: RequestEnvelope) -> dict[str, Any]: ...
 
+
 @runtime_checkable
 class CapabilityProviderContract(Protocol):
     @property
     def provider_id(self) -> str: ...
 
     def profile_for(self, key: "CapabilityKey") -> "CapabilityProfile | None": ...
+
+
+@runtime_checkable
+class AgentIntegrationContract(Protocol):
+    @property
+    def agent_id(self) -> str: ...
+
+    @property
+    def capability_key(self) -> "CapabilityKey": ...
+
+    @property
+    def endpoint(self) -> str: ...
 
 
 @runtime_checkable
