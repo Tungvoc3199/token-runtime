@@ -101,7 +101,10 @@ def doctor_report(config_path: Path) -> dict[str, bool]:
         "gateway_reachable": False,
         "upstream_reachable": False,
     }
-    config = load_config(config_path)
+    try:
+        config = load_config(config_path)
+    except FileNotFoundError:
+        return report
     report["config_ok"] = True
 
     state = Path(config.state_dir)
@@ -236,6 +239,14 @@ def main(argv=None, *, stdin=None, stdout=None) -> int:
         })
         return 0
 
+    if args.command == "doctor":
+        report = doctor_report(path)
+        payload = dict(report)
+        if not report["config_ok"]:
+            payload["next_step"] = "token install --upstream <UPSTREAM_URL>"
+        _write_json(stdout, payload)
+        return 0 if all(report.values()) else 1
+
     config = load_config(path)
     if args.command == "serve":
         core, _ = _runtime(config)
@@ -245,10 +256,6 @@ def main(argv=None, *, stdin=None, stdout=None) -> int:
         _, metrics = _runtime(config)
         _write_json(stdout, metrics.summary())
         return 0
-    if args.command == "doctor":
-        report = doctor_report(path)
-        _write_json(stdout, report)
-        return 0 if all(report.values()) else 1
     if args.command == "optimize":
         core, _ = _runtime(config)
         prepared = core.prepare(args.endpoint, _read_input_bytes(stdin))

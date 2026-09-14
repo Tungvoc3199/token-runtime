@@ -10,6 +10,7 @@ from .capabilities import CapabilityKey
 from .codex_recertification import build_codex_01540_recertification
 from .compatibility import CompatibilityRecord, CompatibilityState
 from .gemini_conformance import build_gemini_conformance
+from .openai_agents_conformance import build_openai_agents_conformance
 from .openai_certification import build_openai_certification
 
 
@@ -395,6 +396,7 @@ def build_current_certification() -> CompatibilityCertificationBundle:
     codex = build_codex_01540_recertification()
     anthropic = build_anthropic_conformance()
     gemini = build_gemini_conformance()
+    agents = build_openai_agents_conformance()
 
     certified_evidence_ids = tuple(
         sorted(
@@ -443,7 +445,7 @@ def build_current_certification() -> CompatibilityCertificationBundle:
         )
     )
 
-    for bundle in (anthropic, gemini):
+    for bundle in (anthropic, gemini, agents):
         entries.append(
             CertificationEntry(
                 scope=_scope_for_key(

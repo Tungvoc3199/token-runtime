@@ -26,22 +26,22 @@ jobs:
       - name: Prepare isolated distribution tooling
         run: |
           python -m venv /tmp/token-dist-tools
-          /tmp/token-dist-tools/bin/python -m pip install 'build==1.6.0' 'setuptools==84.0.0' 'wheel==0.46.1' 'packaging==26.3' 'uv==0.12.13'
+          /tmp/token-dist-tools/bin/python -m pip install 'build==1.6.0' 'setuptools==84.0.0' 'wheel==0.46.3' 'packaging==26.3' 'uv==0.12.13'
           mkdir -p /tmp/token-dist-wheelhouse
-          /tmp/token-dist-tools/bin/python -m pip download --only-binary=:all: --no-deps -d /tmp/token-dist-wheelhouse 'setuptools==84.0.0' 'wheel==0.46.1' 'packaging==26.3'
+          /tmp/token-dist-tools/bin/python -m pip download --only-binary=:all: --no-deps -d /tmp/token-dist-wheelhouse 'setuptools==84.0.0' 'wheel==0.46.3' 'packaging==26.3'
 
       - name: Build two sanitized candidates
         env:
           TOKEN_DISTRIBUTION_BUILD_WHEELHOUSE: /tmp/token-dist-wheelhouse
         run: |
           rm -rf /tmp/token-dist-candidate-a /tmp/token-dist-candidate-b /tmp/token-dist-release-a /tmp/token-dist-release-b
-          /tmp/token-dist-tools/bin/python scripts/distribution.py build --source . --candidate /tmp/token-dist-candidate-a --bundle /tmp/token-dist-release-a --release-label v0.1.0-alpha.2
-          /tmp/token-dist-tools/bin/python scripts/distribution.py build --source . --candidate /tmp/token-dist-candidate-b --bundle /tmp/token-dist-release-b --release-label v0.1.0-alpha.2
+          /tmp/token-dist-tools/bin/python scripts/distribution.py build --source . --candidate /tmp/token-dist-candidate-a --bundle /tmp/token-dist-release-a --release-label v0.1.0-alpha.3
+          /tmp/token-dist-tools/bin/python scripts/distribution.py build --source . --candidate /tmp/token-dist-candidate-b --bundle /tmp/token-dist-release-b --release-label v0.1.0-alpha.3
 
       - name: Compare distribution bytes
         run: |
-          cmp /tmp/token-dist-release-a/dist/token_runtime-0.1.0a2-py3-none-any.whl /tmp/token-dist-release-b/dist/token_runtime-0.1.0a2-py3-none-any.whl
-          cmp /tmp/token-dist-release-a/dist/token_runtime-0.1.0a2.tar.gz /tmp/token-dist-release-b/dist/token_runtime-0.1.0a2.tar.gz
+          cmp /tmp/token-dist-release-a/dist/token_runtime-0.1.0a3-py3-none-any.whl /tmp/token-dist-release-b/dist/token_runtime-0.1.0a3-py3-none-any.whl
+          cmp /tmp/token-dist-release-a/dist/token_runtime-0.1.0a3.tar.gz /tmp/token-dist-release-b/dist/token_runtime-0.1.0a3.tar.gz
 
       - name: Verify and qualify install transitions
         env:
@@ -50,14 +50,16 @@ jobs:
         run: |
           /tmp/token-dist-tools/bin/python scripts/distribution.py verify --bundle /tmp/token-dist-release-a
           rm -rf /tmp/token-dist-prior /tmp/token-dist-install
-          /tmp/token-dist-tools/bin/python scripts/distribution.py prior-fixture --dist /tmp/token-dist-prior
-          /tmp/token-dist-tools/bin/python scripts/distribution.py qualify --bundle /tmp/token-dist-release-a --previous-wheel /tmp/token-dist-prior/token_runtime-0.1.0a1-py3-none-any.whl --work-root /tmp/token-dist-install
+          mkdir -p /tmp/token-dist-prior
+          /tmp/token-dist-tools/bin/python -m pip download --only-binary=:all: --no-deps -d /tmp/token-dist-prior token-runtime==0.1.0a2
+          echo "9af7e100ae62a7bb33217bc201aeffbe345f071068b1879a8e06a2bd8a507bac  /tmp/token-dist-prior/token_runtime-0.1.0a2-py3-none-any.whl" | sha256sum -c -
+          /tmp/token-dist-tools/bin/python scripts/distribution.py qualify --bundle /tmp/token-dist-release-a --previous-wheel /tmp/token-dist-prior/token_runtime-0.1.0a2-py3-none-any.whl --work-root /tmp/token-dist-install
           python scripts/public_audit.py --source-tree .
 
       - name: Upload qualified bundle
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: token-runtime-v0.1.0-alpha.2-qualified
+          name: token-runtime-v0.1.0-alpha.3-qualified
           path: /tmp/token-dist-release-a/
           if-no-files-found: error
           retention-days: 14

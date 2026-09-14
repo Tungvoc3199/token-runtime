@@ -461,6 +461,36 @@ class CurrentCertificationMatrixTests(unittest.TestCase):
                 self.assertEqual(record.state, CompatibilityState.PASSTHROUGH_ONLY)
                 self.assertEqual(record.reason, "offline_conformance_only")
 
+    def test_openai_agents_offline_conformance_is_passthrough_only(self):
+        from token_runtime.openai_agents_conformance import OPENAI_AGENTS_API_KEY
+
+        bundle = build_current_certification()
+        for os_family in OSFamily:
+            with self.subTest(os_family=os_family):
+                record = bundle.resolve(OPENAI_AGENTS_API_KEY, os_family)
+                self.assertEqual(record.state, CompatibilityState.PASSTHROUGH_ONLY)
+                self.assertEqual(record.reason, "offline_conformance_only")
+                self.assertNotEqual(record.evidence_id, "unknown")
+
+        rows = [
+            row
+            for row in bundle.to_primitive()["matrix"]
+            if row["scope"]["target"]["protocol_family"] == "openai_agents_api"
+        ]
+        self.assertEqual(len(rows), 1)
+        self.assertIsNone(rows[0]["benchmark_generation_id"])
+
+        near = CapabilityKey(
+            "generic-openai",
+            "openai_agents_api",
+            "openai",
+            client_version="future",
+        )
+        near_record = bundle.resolve(near, OSFamily.LINUX)
+        self.assertEqual(near_record.state, CompatibilityState.PASSTHROUGH_ONLY)
+        self.assertEqual(near_record.reason, "unknown_capability")
+        self.assertEqual(near_record.evidence_id, "unknown")
+
     def test_current_matrix_does_not_infer_support_from_model_name(self):
         bundle = build_current_certification()
         key = CapabilityKey(

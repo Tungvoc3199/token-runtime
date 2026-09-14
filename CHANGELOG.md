@@ -4,6 +4,14 @@ All notable public TOKEN changes are recorded here.
 
 ## Unreleased
 
+## 0.1.0-alpha.3
+
+- Added protocol-selection isolation so model/provider changes do not silently alter TOKEN routing semantics.
+- Added OpenAI Agents API offline conformance with managed session state kept `PASSTHROUGH_ONLY` and out of production routing.
+- Improved first-run onboarding: PyPI/uv quickstart and actionable `token doctor` output when config is missing.
+- Generalized distribution upgrade/rollback qualification to derive versions from artifact metadata instead of hard-coding Alpha.2.
+- Updated the controlled build toolchain away from the yanked `wheel==0.46.1` pin.
+
 ## 0.1.0-alpha.2
 
 - Codex CLI 0.154.0 request/response boundary recertification with native/internal state kept passthrough-safe where TOKEN cannot observe semantics.

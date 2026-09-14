@@ -30,6 +30,7 @@ _PEP440_ALPHA_RE = re.compile(r"([0-9]+)\.([0-9]+)\.([0-9]+)a([0-9]+)")
 _SHA256_RE = re.compile(r"[0-9a-f]{64}")
 _PACKAGE_NAME = "token-runtime"
 _SANITIZER_CONTRACT_VERSION = 1
+_BUILD_WHEEL_REQUIREMENT = "wheel==0.46.3"
 
 @dataclass(frozen=True, slots=True)
 class ArtifactRecord:
@@ -442,7 +443,7 @@ def qualify_pip_sdist(sdist: Path, expected_version: str, root: Path) -> None:
     wheelhouse = _build_wheelhouse()
     python, pip, token = _create_venv(root / "venv")
     env = _qualification_env(root / "state")
-    _pip_install(pip, ["install", "--no-index", "--find-links", str(wheelhouse), "setuptools==84.0.0", "wheel==0.46.1"], env)
+    _pip_install(pip, ["install", "--no-index", "--find-links", str(wheelhouse), "setuptools==84.0.0", _BUILD_WHEEL_REQUIREMENT], env)
     _pip_install(pip, ["install", "--no-deps", "--no-index", "--no-build-isolation", str(Path(sdist).resolve())], env)
     installed_smoke(python, token, expected_version, env)
 
@@ -512,12 +513,16 @@ def qualify_upgrade_rollback(previous_wheel: Path, candidate_wheel: Path, root: 
     root = _require_qualification_root(root)
     previous_wheel = Path(previous_wheel).resolve()
     candidate_wheel = Path(candidate_wheel).resolve()
+    previous_name, previous_version = _inspect_wheel(previous_wheel)
+    candidate_name, candidate_version = _inspect_wheel(candidate_wheel)
+    if previous_name != _PACKAGE_NAME or candidate_name != _PACKAGE_NAME:
+        raise ValueError("upgrade/rollback package identity mismatch")
     python, pip, token = _create_venv(root / "venv")
     env = _qualification_env(root / "state")
     stages = (
-        ("prior", ["install", "--no-deps", "--no-index", "--force-reinstall", str(previous_wheel)], "0.1.0a1"),
-        ("upgrade", ["install", "--no-deps", "--no-index", "--upgrade", "--force-reinstall", str(candidate_wheel)], "0.1.0a2"),
-        ("rollback", ["install", "--no-deps", "--no-index", "--force-reinstall", str(previous_wheel)], "0.1.0a1"),
+        ("prior", ["install", "--no-deps", "--no-index", "--force-reinstall", str(previous_wheel)], previous_version),
+        ("upgrade", ["install", "--no-deps", "--no-index", "--upgrade", "--force-reinstall", str(candidate_wheel)], candidate_version),
+        ("rollback", ["install", "--no-deps", "--no-index", "--force-reinstall", str(previous_wheel)], previous_version),
     )
     for stage, command, version in stages:
         try:

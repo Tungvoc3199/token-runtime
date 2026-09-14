@@ -6,8 +6,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+from token_runtime.adapters import ChatCompletionsAdapter
 from token_runtime.engine import OptimizationEngine
 from token_runtime.gateway import GatewayCore, build_server
+from token_runtime.protocol_registry import ProtocolAdapterRegistry
 from token_runtime.metrics import MetricsStore
 from token_runtime.planner import ContextPlanner
 from token_runtime.store import RecoveryStore
@@ -18,14 +20,14 @@ class BrokenEngine:
         raise RuntimeError("boom")
 
 
-def make_core(tmp, engine=None):
+def make_core(tmp, engine=None, registry=None):
     metrics = MetricsStore(Path(tmp) / "metrics.db")
     if engine is None:
         engine = OptimizationEngine(
             planner=ContextPlanner(),
             store=RecoveryStore(Path(tmp) / "recovery.db"),
         )
-    return GatewayCore(engine=engine, metrics=metrics), metrics
+    return GatewayCore(engine=engine, metrics=metrics, registry=registry), metrics
 
 
 class GatewayCoreTests(unittest.TestCase):
@@ -68,6 +70,25 @@ class GatewayCoreTests(unittest.TestCase):
             prepared = core.prepare("/v1/chat/completions", raw)
             self.assertIs(prepared.body, raw)
             self.assertIn("fallback_internal_error", prepared.reasons)
+
+    def test_registered_synthetic_endpoint_uses_adapter_without_gateway_edit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            registry = ProtocolAdapterRegistry()
+            registry.register("/v1/future-chat", ChatCompletionsAdapter)
+            core, _ = make_core(tmp, registry=registry)
+            line = "redundant assistant history line with enough bytes to matter"
+            payload = {
+                "model": "future-model",
+                "messages": [
+                    {"role": "assistant", "content": "\n".join([line] * 20)},
+                    {"role": "user", "content": "current task"},
+                ],
+            }
+            prepared = core.prepare(
+                "/v1/future-chat?trace=1", json.dumps(payload).encode()
+            )
+            self.assertTrue(prepared.optimized)
+            self.assertEqual(prepared.adapter, "chat_completions")
 
 
 class GatewayHttpTests(unittest.TestCase):

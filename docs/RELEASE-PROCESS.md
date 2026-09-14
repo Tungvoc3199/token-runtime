@@ -44,11 +44,11 @@ After an approved public mutation, verify the public `main` identity, CI state, 
 
 ## Distribution qualification
 
-C4 qualifies `token-runtime` from a sanitized public candidate only. Release labels use the strict mapping `vX.Y.Z-alpha.N -> X.Y.ZaN`; the current candidate is `v0.1.0-alpha.2 -> 0.1.0a2`.
+C4 qualifies `token-runtime` from a sanitized public candidate only. Release labels use the strict mapping `vX.Y.Z-alpha.N -> X.Y.ZaN`; the current candidate is `v0.1.0-alpha.3 -> 0.1.0a3`.
 
 Build qualification uses `SOURCE_DATE_EPOCH=1788998400`, a controlled build backend, and two independent sanitized candidates. The wheel and sdist must compare byte-for-byte before a reproducibility claim is allowed. The verified bundle contains `release/dist/`, `release/SHA256SUMS`, and `release/TOKEN_DISTRIBUTION_PROVENANCE.json`.
 
-Local qualification verifies the bundle, installs the wheel and sdist into disposable virtual environments, runs `uv tool` from disposable state, and proves `0.1.0a1 -> 0.1.0a2 -> 0.1.0a1` upgrade/rollback. It never uses an editable install and never runs `token install` or `token uninstall` against user state.
+Local qualification verifies the bundle, installs the wheel and sdist into disposable virtual environments, runs `uv tool` from disposable state, and proves exact published `0.1.0a2 -> 0.1.0a3 -> 0.1.0a2` upgrade/rollback for Alpha.3. It never uses an editable install and never runs `token install` or `token uninstall` against user state.
 
 The distribution workflow builds and qualifies local artifacts only. Index-backed user commands are post-publication instructions and are not executed by C4 before the owner gate:
 

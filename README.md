@@ -12,7 +12,7 @@ Local-first adaptive context optimization for Codex and OpenAI-compatible AI age
 ![License](https://img.shields.io/badge/license-Apache--2.0-22D3EE)
 ![Local First](https://img.shields.io/badge/privacy-local--first-238636)
 ![Codex](https://img.shields.io/badge/Codex-integration_verified-8957e5)
-[![Release](https://img.shields.io/badge/release-v0.1.0--alpha.2-0EA5E9)](https://github.com/Tungvoc3199/token-runtime/releases/tag/v0.1.0-alpha.2)
+[![Release](https://img.shields.io/badge/release-v0.1.0--alpha.3-0EA5E9)](https://github.com/Tungvoc3199/token-runtime/releases/tag/v0.1.0-alpha.3)
 
 [Quickstart](#quickstart) · [Proof](#proof) · [How it works](#how-it-works) · [Safety](#safety-first-by-design) · [Compatibility](#compatibility) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Security](SECURITY.md)
 
@@ -93,16 +93,16 @@ The V1 planner protects the active turn, protocol state, hard constraints, exact
 
 Python 3.12+ is required.
 
-Install the published Alpha.2 package from PyPI:
+Install the Alpha.3 package from PyPI after publication:
 
 ```bash
-pip install token-runtime==0.1.0a2
+pip install token-runtime==0.1.0a3
 ```
 
 Or install it as an isolated CLI tool with `uv`:
 
 ```bash
-uv tool install token-runtime==0.1.0a2
+uv tool install token-runtime==0.1.0a3
 ```
 
 Preview integration changes first:
@@ -157,6 +157,7 @@ For Codex, TOKEN transactionally manages only the selected OpenAI-compatible pro
 | Local OpenAI-compatible gateways/routers | ✅ Supported |
 | Anthropic Messages adapter/conformance | 🛡️ `PASSTHROUGH_ONLY`; offline conformance, not production gateway-wired |
 | Gemini GenerateContent adapter/conformance | 🛡️ `PASSTHROUGH_ONLY`; offline conformance, not production gateway-wired |
+| OpenAI Agents API managed-session conformance | 🛡️ `PASSTHROUGH_ONLY`; offline conformance only, not production routing |
 | Multimodal optimization | 🛡️ `PASSTHROUGH_ONLY` |
 
 `CERTIFIED` is always version- and boundary-specific. Canonical source can also contain adapters that are not deployed in the active gateway. See the [compatibility matrix](docs/COMPATIBILITY.md) for the exact evidence boundary.
@@ -213,7 +214,7 @@ The approved 24-call live campaign found a real regression class. The final poli
 - [Release process](docs/RELEASE-PROCESS.md)
 - [GitHub governance](docs/GITHUB-GOVERNANCE.md)
 - [Public benchmark](benchmarks/README.md)
-- [v0.1.0-alpha.2 release notes](docs/releases/v0.1.0-alpha.2.md)
+- [v0.1.0-alpha.3 release notes](docs/releases/v0.1.0-alpha.3.md)
 - [Apache-2.0 license](LICENSE)
 
 ---

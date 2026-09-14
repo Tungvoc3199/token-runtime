@@ -10,17 +10,7 @@ RELEASE_NOTES = ROOT / "docs" / "releases" / f"{RELEASE_LABEL}.md"
 
 
 class Alpha2ReleaseCandidateContractTests(unittest.TestCase):
-    def test_release_identity_is_consistent_across_public_source_surface(self):
-        project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
-        self.assertEqual(project["version"], PACKAGE_VERSION)
-
-        readme = (ROOT / "README.md").read_text()
-        self.assertIn(f"releases/tag/{RELEASE_LABEL}", readme)
-        self.assertIn(
-            f"[{RELEASE_LABEL} release notes](docs/releases/{RELEASE_LABEL}.md)",
-            readme,
-        )
-
+    def test_historical_alpha2_release_evidence_remains_available(self):
         changelog = (ROOT / "CHANGELOG.md").read_text()
         self.assertIn(f"## {RELEASE_LABEL.removeprefix('v')}", changelog)
 
