@@ -93,8 +93,16 @@ The V1 planner protects the active turn, protocol state, hard constraints, exact
 
 Python 3.12+ is required.
 
+Install the published Alpha.2 package from PyPI:
+
 ```bash
-python3 -m pip install . --no-build-isolation
+pip install token-runtime==0.1.0a2
+```
+
+Or install it as an isolated CLI tool with `uv`:
+
+```bash
+uv tool install token-runtime==0.1.0a2
 ```
 
 Preview integration changes first:
