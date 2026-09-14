@@ -9,8 +9,11 @@ from typing import Any
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-from .adapters import ChatCompletionsAdapter, ResponsesAdapter
 from .metrics import MetricsStore
+from .protocol_registry import (
+    ProtocolAdapterRegistry,
+    default_protocol_adapter_registry,
+)
 from .model import OptimizationDecision
 
 
@@ -27,13 +30,22 @@ class PreparedRequest:
 
 
 class GatewayCore:
-    def __init__(self, *, engine, metrics: MetricsStore):
+    def __init__(
+        self,
+        *,
+        engine,
+        metrics: MetricsStore,
+        registry: ProtocolAdapterRegistry | None = None,
+    ):
         self.engine = engine
         self.metrics = metrics
+        self.registry = (
+            registry if registry is not None else default_protocol_adapter_registry()
+        )
 
     def prepare(self, path: str, raw_body: bytes) -> PreparedRequest:
         started = time.perf_counter()
-        adapter = self._adapter(path)
+        adapter = self.registry.resolve(path)
         if adapter is None:
             prepared = PreparedRequest(raw_body, False, ("unsupported_endpoint",), None)
             self._record(prepared, None, None, None, started)
@@ -67,15 +79,6 @@ class GatewayCore:
             )
             self._record(prepared, None, payload, adapter.name, started)
             return prepared
-
-    @staticmethod
-    def _adapter(path: str):
-        clean_path = path.split("?", 1)[0]
-        if clean_path == "/v1/responses":
-            return ResponsesAdapter()
-        if clean_path == "/v1/chat/completions":
-            return ChatCompletionsAdapter()
-        return None
 
     def _record(self, prepared, result, payload, adapter_name, started) -> None:
         before = getattr(result, "before_estimated_tokens", None)

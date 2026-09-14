@@ -47,7 +47,7 @@ jobs:
       - name: Download qualified bundle
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
-          name: token-runtime-v0.1.0-alpha.2-qualified
+          name: token-runtime-v0.1.0-alpha.3-qualified
           path: release
           repository: ${{ github.repository }}
           run-id: ${{ inputs.qualification_run_id }}
@@ -59,8 +59,8 @@ jobs:
           python scripts/distribution.py verify --bundle release
           python -c "import json; from pathlib import Path; from scripts.public_release import tree_digest; p=json.load(open('release/TOKEN_DISTRIBUTION_PROVENANCE.json')); assert p['source_runtime_sha256'] == tree_digest(Path('src/token_runtime')), 'bundle runtime digest mismatch'"
           python -c "import json; d=json.load(open('release/TOKEN_DISTRIBUTION_PROVENANCE.json')); print('release_label='+d['release_label'])" >> "${GITHUB_OUTPUT}"
-          echo "wheel_sha=$(sha256sum release/dist/token_runtime-0.1.0a2-py3-none-any.whl | cut -d' ' -f1)" >> "${GITHUB_OUTPUT}"
-          echo "sdist_sha=$(sha256sum release/dist/token_runtime-0.1.0a2.tar.gz | cut -d' ' -f1)" >> "${GITHUB_OUTPUT}"
+          echo "wheel_sha=$(sha256sum release/dist/token_runtime-0.1.0a3-py3-none-any.whl | cut -d' ' -f1)" >> "${GITHUB_OUTPUT}"
+          echo "sdist_sha=$(sha256sum release/dist/token_runtime-0.1.0a3.tar.gz | cut -d' ' -f1)" >> "${GITHUB_OUTPUT}"
           RELEASE_LABEL="$(python -c "import json; print(json.load(open('release/TOKEN_DISTRIBUTION_PROVENANCE.json'))['release_label'])")"
           case "${GITHUB_REF}" in refs/tags/*) test "${GITHUB_REF}" = "refs/tags/${RELEASE_LABEL}" ;; *) : ;; esac
 
@@ -79,7 +79,7 @@ jobs:
       - name: Download the same qualified bundle
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
-          name: token-runtime-v0.1.0-alpha.2-qualified
+          name: token-runtime-v0.1.0-alpha.3-qualified
           path: release
           repository: ${{ github.repository }}
           run-id: ${{ inputs.qualification_run_id }}
@@ -90,8 +90,8 @@ jobs:
           EXPECTED_WHEEL_SHA: ${{ needs.verify.outputs.wheel_sha }}
           EXPECTED_SDIST_SHA: ${{ needs.verify.outputs.sdist_sha }}
         run: |
-          test "$(sha256sum release/dist/token_runtime-0.1.0a2-py3-none-any.whl | cut -d' ' -f1)" = "${EXPECTED_WHEEL_SHA}"
-          test "$(sha256sum release/dist/token_runtime-0.1.0a2.tar.gz | cut -d' ' -f1)" = "${EXPECTED_SDIST_SHA}"
+          test "$(sha256sum release/dist/token_runtime-0.1.0a3-py3-none-any.whl | cut -d' ' -f1)" = "${EXPECTED_WHEEL_SHA}"
+          test "$(sha256sum release/dist/token_runtime-0.1.0a3.tar.gz | cut -d' ' -f1)" = "${EXPECTED_SDIST_SHA}"
 
       - name: Publish verified distributions
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33

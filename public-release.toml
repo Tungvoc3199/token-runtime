@@ -31,6 +31,7 @@ public = [
   "scripts/public_release.py",
   "docs/CLAIMS.md",
   "docs/COMPATIBILITY.md",
+  "docs/LLM-CHANGE-PLAYBOOK.md",
   "docs/GITHUB-GOVERNANCE.md",
   "docs/RELEASE-PROCESS.md",
   "docs/THREAT-MODEL.md",
@@ -38,6 +39,7 @@ public = [
   "docs/assets/**",
   "docs/releases/v0.1.0-alpha.1.md",
   "docs/releases/v0.1.0-alpha.2.md",
+  "docs/releases/v0.1.0-alpha.3.md",
 ]
 private = [
   "docs/specs/TOKEN-V1.md",

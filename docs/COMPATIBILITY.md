@@ -27,6 +27,7 @@ It does not imply that every installed or deployed TOKEN gateway is running the 
 | Codex CLI 0.154.0 / Responses request-response boundary | CERTIFIED | Exact request replay, opaque response forwarding, TOKEN OFF/ON boundary, resume/fork continuity |
 | Anthropic Messages adapter/conformance | PASSTHROUGH_ONLY | Offline request-boundary conformance; implemented but not wired into the production gateway |
 | Gemini GenerateContent adapter/conformance | PASSTHROUGH_ONLY | Offline request-boundary conformance; implemented but not wired into the production gateway |
+| OpenAI Agents API beta / managed-session offline conformance | PASSTHROUGH_ONLY | Frozen 2026-09-13 synthetic corpus + fingerprinted evidence; native session/context state protected; not routed by the production gateway |
 
 ### Codex 0.154.0 boundary detail
 
@@ -48,6 +49,12 @@ The canonical source includes native request adapters plus offline conformance s
 Both compatibility records remain `PASSTHROUGH_ONLY`, and neither adapter is wired into the production gateway.
 
 Therefore public wording may say that adapter/conformance support exists in canonical development, but must not say that native Anthropic or Gemini production routing is enabled or certified.
+
+## OpenAI Agents API boundary
+
+The canonical source contains offline conformance evidence for the frozen 2026-09-13 Agents API beta snapshot. The exact `generic-openai + openai_agents_api + openai` capability is known to the canonical compatibility matrix only as `PASSTHROUGH_ONLY / offline_conformance_only`.
+
+TOKEN does not route `/agents/sessions` or `/agents/sessions/{session_id}/events`, does not implement an Agents adapter, and does not transform OpenAI-managed session orchestration, context compaction, recovery, tool/MCP state, subagent state, required actions, cancellation, or unknown beta fields. This evidence is frozen-corpus/control-plane conformance, not live provider or stream-forwarding certification.
 
 ## Canonical source versus installed runtime
 

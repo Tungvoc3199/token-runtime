@@ -28,6 +28,14 @@ RELEASE_LABEL = "v0.1.0-alpha.2"
 VERSION = "0.1.0a2"
 
 
+def current_project_version() -> str:
+    return tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["version"]
+
+
+def current_release_label() -> str:
+    return release_label_for_version(current_project_version())
+
+
 def require_task2_api(test: unittest.TestCase, name: str):
     api = getattr(distribution, name, None)
     test.assertIsNotNone(
@@ -163,7 +171,7 @@ token = "token_runtime.cli:main"
     def test_canonical_package_metadata_matches_distribution_contract(self):
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
         self.assertEqual(project["name"], "token-runtime")
-        self.assertEqual(project["version"], "0.1.0a2")
+        self.assertEqual(project["version"], current_project_version())
         self.assertEqual(project["dependencies"], [])
         self.assertEqual(project["scripts"]["token"], "token_runtime.cli:main")
 
@@ -173,11 +181,11 @@ token = "token_runtime.cli:main"
             self.assertFalse(manifest_path.exists())
             return
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        self.assertEqual(manifest["release_version"], RELEASE_LABEL)
+        self.assertEqual(manifest["release_version"], current_release_label())
         self.assertEqual(manifest["sanitizer_contract_version"], 1)
         self.assertEqual(
             validate_version_contract(ROOT, manifest),
-            ("token-runtime", VERSION),
+            ("token-runtime", current_project_version()),
         )
 
     def test_contract_cli_missing_manifest_does_not_leak_absolute_candidate_path(self):
@@ -650,7 +658,7 @@ class DistributionInstallTests(unittest.TestCase):
         self.assertEqual(len(commands), 2)
         self.assertIn("--find-links", commands[0])
         self.assertIn("setuptools==84.0.0", commands[0])
-        self.assertIn("wheel==0.46.1", commands[0])
+        self.assertIn("wheel==0.46.3", commands[0])
         self.assertIn("--no-build-isolation", commands[1])
         self.assertIn("--no-deps", commands[1])
         self.assertIn("--no-index", commands[1])
@@ -715,8 +723,8 @@ class DistributionUpgradeRollbackTests(unittest.TestCase):
             root = Path(tmp)
             prior = root / "token_runtime-0.1.0a1-py3-none-any.whl"
             current = root / WHEEL_NAME
-            prior.write_bytes(b"prior")
-            current.write_bytes(b"current")
+            write_wheel(prior, version="0.1.0a1")
+            write_wheel(current, version=VERSION)
             with (
                 mock.patch.object(distribution, "_create_venv") as create,
                 mock.patch.object(distribution, "_pip_install") as install,
@@ -739,8 +747,8 @@ class DistributionUpgradeRollbackTests(unittest.TestCase):
             root = Path(tmp)
             prior = root / "token_runtime-0.1.0a1-py3-none-any.whl"
             current = root / WHEEL_NAME
-            prior.write_bytes(b"prior")
-            current.write_bytes(b"current")
+            write_wheel(prior, version="0.1.0a1")
+            write_wheel(current, version=VERSION)
             with (
                 mock.patch.object(distribution, "_create_venv") as create,
                 mock.patch.object(distribution, "_pip_install", side_effect=[None, RuntimeError("boom")]),
@@ -771,11 +779,18 @@ class DistributionWorkflowTests(unittest.TestCase):
         self.assertIn("actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02", text)
         self.assertGreaterEqual(text.count("scripts/distribution.py build"), 2)
         self.assertIn("cmp ", text)
-        self.assertIn("scripts/distribution.py prior-fixture", text)
+        self.assertIn("token-runtime==0.1.0a2", text)
+        self.assertIn("token_runtime-0.1.0a2-py3-none-any.whl", text)
+        self.assertIn("sha256sum -c", text)
         self.assertIn("scripts/distribution.py qualify", text)
         self.assertIn("scripts/distribution.py verify", text)
         self.assertIn("scripts/public_audit.py", text)
-        self.assertIn("token-runtime-v0.1.0-alpha.2-qualified", text)
+        version = current_project_version()
+        label = current_release_label()
+        self.assertIn(f"--release-label {label}", text)
+        self.assertIn(f"token_runtime-{version}-py3-none-any.whl", text)
+        self.assertIn(f"token_runtime-{version}.tar.gz", text)
+        self.assertIn(f"token-runtime-{label}-qualified", text)
         self.assertIn("--bundle /tmp/token-dist-release-a", text)
         self.assertIn("--bundle /tmp/token-dist-release-b", text)
         self.assertNotIn("--bundle release", text)
@@ -796,6 +811,11 @@ class DistributionWorkflowTests(unittest.TestCase):
         self.assertIn("name: pypi", text)
         self.assertIn("url: https://pypi.org/p/token-runtime", text)
         self.assertIn("packages-dir: release/dist", text)
+        version = current_project_version()
+        label = current_release_label()
+        self.assertIn(f"token-runtime-{label}-qualified", text)
+        self.assertIn(f"token_runtime-{version}-py3-none-any.whl", text)
+        self.assertIn(f"token_runtime-{version}.tar.gz", text)
         self.assertNotIn("username:", text.lower())
         self.assertNotIn("password:", text.lower())
         self.assertNotIn("api-token:", text.lower())
@@ -821,6 +841,10 @@ class DistributionWorkflowTests(unittest.TestCase):
 
     def test_release_process_documents_local_qualification_and_oidc_boundary(self):
         text = self._read("docs/RELEASE-PROCESS.md")
+        self.assertIn(
+            f"{current_release_label()} -> {current_project_version()}",
+            text,
+        )
         for required in (
             "python -m pip install token-runtime",
             "uv tool install token-runtime",
